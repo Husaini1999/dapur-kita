@@ -60,49 +60,81 @@ const mockCooks = [
 
 const mockDishes = [
 	{
-		id: '1',
+		id: 1,
 		name: 'Nasi Lemak',
+		category: 'Main Course',
 		price: 8.5,
 		image: '/nasi-lemak.png',
+		description:
+			'Traditional Malaysian coconut rice with sambal, anchovies, and boiled egg',
+		cookingTime: '20-25 min',
+		available: true,
+		rating: 4.9,
+		reviewCount: 45,
+		dietaryInfo: ['Halal', 'Contains Fish'],
 		cookName: "Mak Cik's Kitchen",
 		cuisine: 'Malay',
-		rating: 4.9,
 	},
 	{
-		id: '2',
+		id: 2,
 		name: 'Beef Rendang',
+		category: 'Main Course',
 		price: 15.0,
 		image: '/beef-rendang.png',
+		description: 'Slow-cooked beef in rich coconut milk and spices',
+		cookingTime: '30-35 min',
+		available: true,
+		rating: 4.8,
+		reviewCount: 38,
+		dietaryInfo: ['Halal'],
 		cookName: "Mak Cik's Kitchen",
 		cuisine: 'Malay',
-		rating: 4.8,
 	},
 	{
-		id: '3',
+		id: 3,
 		name: 'Banana Leaf Rice',
+		category: 'Main Course',
 		price: 12.0,
 		image: '/banana-leaf-rice.png',
+		description:
+			'Rice served on banana leaf with various curries and vegetables',
+		cookingTime: '25-30 min',
+		available: true,
+		rating: 4.7,
+		reviewCount: 52,
+		dietaryInfo: ['Vegetarian Option'],
 		cookName: "Ravi's Spice Corner",
 		cuisine: 'Indian',
-		rating: 4.7,
 	},
 	{
-		id: '4',
+		id: 4,
 		name: 'Ayam Pongteh',
+		category: 'Main Course',
 		price: 14.0,
 		image: '/ayam-pongteh.png',
+		description: 'Peranakan chicken stew with fermented bean paste',
+		cookingTime: '35-40 min',
+		available: true,
+		rating: 4.6,
+		reviewCount: 29,
+		dietaryInfo: ['Halal'],
 		cookName: "Ravi's Spice Corner",
 		cuisine: 'Peranakan',
-		rating: 4.6,
 	},
 	{
-		id: '5',
+		id: 5,
 		name: 'Kuih Lapis',
+		category: 'Dessert',
 		price: 6.0,
 		image: '/kuih-lapis.png',
+		description: 'Traditional layered cake with coconut milk and pandan',
+		cookingTime: '15-20 min',
+		available: true,
+		rating: 4.5,
+		reviewCount: 33,
+		dietaryInfo: ['Halal', 'Vegetarian'],
 		cookName: "Siti's Desserts",
 		cuisine: 'Malay',
-		rating: 4.5,
 	},
 ];
 
@@ -250,7 +282,11 @@ export function SearchPage() {
 									</h2>
 									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 										{filteredDishes.map((dish) => (
-											<DishCard key={dish.id} dish={dish} />
+											<DishCard
+												key={dish.id}
+												dish={dish}
+												cookName={dish.cookName}
+											/>
 										))}
 									</div>
 								</div>
