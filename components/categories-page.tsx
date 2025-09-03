@@ -314,11 +314,16 @@ export function CategoriesPage() {
 						<Button
 							asChild
 							size="lg"
-							className="bg-saffron-yellow hover:bg-amber-600"
+							className="bg-amber-600 hover:bg-amber-700 text-white"
 						>
 							<Link href="/browse">Browse All Cooks</Link>
 						</Button>
-						<Button asChild variant="outline" size="lg">
+						<Button
+							asChild
+							variant="outline"
+							size="lg"
+							className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white"
+						>
 							<Link href="/browse?search=true">Advanced Search</Link>
 						</Button>
 					</div>
