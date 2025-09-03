@@ -1,17 +1,20 @@
-import { Navigation } from "@/components/navigation"
-import { OrderConfirmation } from "@/components/order-confirmation"
+import { Navigation } from '@/components/navigation';
+import { OrderConfirmation } from '@/components/order-confirmation';
 
 interface OrderConfirmationPageProps {
-  params: {
-    orderId: string
-  }
+	params: Promise<{
+		orderId: string;
+	}>;
 }
 
-export default function OrderConfirmationPage({ params }: OrderConfirmationPageProps) {
-  return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
-      <OrderConfirmation orderId={params.orderId} />
-    </main>
-  )
+export default async function OrderConfirmationPage({
+	params,
+}: OrderConfirmationPageProps) {
+	const { orderId } = await params;
+	return (
+		<main className="min-h-screen bg-background">
+			<Navigation />
+			<OrderConfirmation orderId={orderId} />
+		</main>
+	);
 }

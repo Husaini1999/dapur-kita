@@ -1,11 +1,16 @@
-import { ReviewForm } from "@/components/review-form"
+import { ReviewForm } from '@/components/review-form';
 
-export default function ReviewPage({ params }: { params: { orderId: string } }) {
-  return (
-    <div className="min-h-screen bg-coconut-white">
-      <div className="container mx-auto px-4 py-8">
-        <ReviewForm orderId={params.orderId} />
-      </div>
-    </div>
-  )
+export default async function ReviewPage({
+	params,
+}: {
+	params: Promise<{ orderId: string }>;
+}) {
+	const { orderId } = await params;
+	return (
+		<div className="min-h-screen bg-coconut-white">
+			<div className="container mx-auto px-4 py-8">
+				<ReviewForm orderId={orderId} />
+			</div>
+		</div>
+	);
 }

@@ -195,7 +195,7 @@ export function SearchPage() {
 							</h1>
 							{searchQuery && (
 								<p className="text-muted-foreground">
-									{totalResults} results for "{searchQuery}"
+									{totalResults} results for &quot;{searchQuery}&quot;
 								</p>
 							)}
 						</div>

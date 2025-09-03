@@ -1,17 +1,18 @@
-import { Navigation } from "@/components/navigation"
-import { CookProfile } from "@/components/cook-profile"
+import { Navigation } from '@/components/navigation';
+import { CookProfile } from '@/components/cook-profile';
 
 interface CookPageProps {
-  params: {
-    id: string
-  }
+	params: Promise<{
+		id: string;
+	}>;
 }
 
-export default function CookPage({ params }: CookPageProps) {
-  return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
-      <CookProfile cookId={params.id} />
-    </main>
-  )
+export default async function CookPage({ params }: CookPageProps) {
+	const { id } = await params;
+	return (
+		<main className="min-h-screen bg-background">
+			<Navigation />
+			<CookProfile cookId={id} />
+		</main>
+	);
 }
