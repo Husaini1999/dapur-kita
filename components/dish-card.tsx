@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -50,11 +51,12 @@ export function DishCard({
 		<Card className="overflow-hidden hover:shadow-md transition-shadow">
 			<div className="flex">
 				{/* Image */}
-				<div className="w-32 h-32 flex-shrink-0">
-					<img
+				<div className="w-32 h-32 flex-shrink-0 relative">
+					<Image
 						src={dish.image || '/placeholder.svg'}
 						alt={dish.name || 'Dish'}
-						className="w-full h-full object-cover"
+						fill
+						className="object-cover"
 					/>
 				</div>
 

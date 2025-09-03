@@ -3,6 +3,7 @@
 import type React from 'react';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -291,11 +292,12 @@ export function EditDishDialog({
 						<div className="flex items-start space-x-6">
 							{imagePreview ? (
 								<div className="relative">
-									<div className="w-32 h-32 rounded-lg overflow-hidden border">
-										<img
+									<div className="w-32 h-32 rounded-lg overflow-hidden border relative">
+										<Image
 											src={imagePreview || '/placeholder.svg'}
 											alt="Dish preview"
-											className="w-full h-full object-cover"
+											fill
+											className="object-cover"
 										/>
 									</div>
 									<Button

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -115,11 +116,12 @@ export function CartPage() {
 											key={item.id}
 											className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 border rounded-lg"
 										>
-											<div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0">
-												<img
+											<div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 relative">
+												<Image
 													src={item.image || '/placeholder.svg'}
 													alt={item.dishName}
-													className="w-full h-full object-cover"
+													fill
+													className="object-cover"
 												/>
 											</div>
 

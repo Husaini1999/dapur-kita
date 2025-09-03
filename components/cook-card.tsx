@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -39,13 +40,14 @@ export function CookCard({ cook }: CookCardProps) {
 		<Card className="overflow-hidden hover:shadow-lg transition-shadow group">
 			{/* Cover Image */}
 			<div className="relative aspect-video">
-				<img
+				<Image
 					src={
 						cook.coverImage ||
 						'/placeholder.svg?height=200&width=400&query=kitchen'
 					}
 					alt={`${cook.name} kitchen`}
-					className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+					fill
+					className="object-cover group-hover:scale-105 transition-transform duration-300"
 					onError={(e) => {
 						const target = e.target as HTMLImageElement;
 						target.src = '/modern-minimalist-kitchen.png';
@@ -72,13 +74,14 @@ export function CookCard({ cook }: CookCardProps) {
 					</Badge>
 				</div>
 				<div className="absolute bottom-3 left-3">
-					<div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-white overflow-hidden bg-white shadow-lg">
-						<img
+					<div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-white overflow-hidden bg-white shadow-lg relative">
+						<Image
 							src={
 								cook.image || '/placeholder.svg?height=60&width=60&query=chef'
 							}
 							alt={cook.ownerName}
-							className="w-full h-full object-cover"
+							fill
+							className="object-cover"
 							onError={(e) => {
 								const target = e.target as HTMLImageElement;
 								target.src = '/diverse-chef-preparing-food.png';
@@ -144,14 +147,15 @@ export function CookCard({ cook }: CookCardProps) {
 					<div className="grid grid-cols-1 gap-2">
 						{(cook.featuredDishes || []).slice(0, 2).map((dish, index) => (
 							<div key={index} className="flex items-center space-x-2 text-xs">
-								<div className="w-8 h-8 sm:w-9 sm:h-9 rounded overflow-hidden flex-shrink-0">
-									<img
+								<div className="w-8 h-8 sm:w-9 sm:h-9 rounded overflow-hidden flex-shrink-0 relative">
+									<Image
 										src={
 											dish.image ||
 											'/placeholder.svg?height=40&width=40&query=food'
 										}
 										alt={dish.name}
-										className="w-full h-full object-cover"
+										fill
+										className="object-cover"
 										onError={(e) => {
 											const target = e.target as HTMLImageElement;
 											target.src = '/diverse-food-spread.png';

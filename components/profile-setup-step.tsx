@@ -3,6 +3,7 @@
 import type React from 'react';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -94,11 +95,12 @@ export function ProfileSetupStep({
 				<div className="flex items-start space-x-6">
 					<div className="relative">
 						{profilePreview ? (
-							<div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20">
-								<img
+							<div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 relative">
+								<Image
 									src={profilePreview || '/placeholder.svg'}
 									alt="Profile preview"
-									className="w-full h-full object-cover"
+									fill
+									className="object-cover"
 								/>
 							</div>
 						) : (
@@ -158,11 +160,12 @@ export function ProfileSetupStep({
 					{kitchenPreviews.map((preview, index) => (
 						<Card key={index} className="relative overflow-hidden">
 							<CardContent className="p-0">
-								<div className="aspect-square">
-									<img
+								<div className="aspect-square relative">
+									<Image
 										src={preview || '/placeholder.svg'}
 										alt={`Kitchen ${index + 1}`}
-										className="w-full h-full object-cover"
+										fill
+										className="object-cover"
 									/>
 								</div>
 								<Button

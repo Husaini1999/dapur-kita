@@ -3,6 +3,7 @@
 import type React from 'react';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -125,11 +126,14 @@ export function ReviewForm({}: ReviewFormProps) {
 				</CardHeader>
 				<CardContent>
 					<div className="flex items-center gap-4 mb-4">
-						<img
-							src={orderData.cookImage || '/placeholder.svg'}
-							alt={orderData.cookName}
-							className="w-16 h-16 rounded-full object-cover"
-						/>
+						<div className="w-16 h-16 rounded-full overflow-hidden relative">
+							<Image
+								src={orderData.cookImage || '/placeholder.svg'}
+								alt={orderData.cookName}
+								fill
+								className="object-cover"
+							/>
+						</div>
 						<div>
 							<h3 className="font-semibold text-spice-brown">
 								{orderData.cookName}

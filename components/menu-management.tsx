@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -212,10 +213,11 @@ export function MenuManagement() {
 				{filteredItems.map((item) => (
 					<Card key={item.id} className="overflow-hidden">
 						<div className="aspect-video relative">
-							<img
+							<Image
 								src={item.image || '/placeholder.svg'}
 								alt={item.name}
-								className="w-full h-full object-cover"
+								fill
+								className="object-cover"
 							/>
 							<div className="absolute top-2 right-2">
 								<Badge

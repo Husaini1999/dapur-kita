@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -127,11 +128,12 @@ export function CookProfile({}: CookProfileProps) {
 			{/* Cook Header */}
 			<div className="relative mb-8">
 				{/* Cover Image */}
-				<div className="aspect-[3/1] rounded-xl overflow-hidden mb-6">
-					<img
+				<div className="aspect-[3/1] rounded-xl overflow-hidden mb-6 relative">
+					<Image
 						src={cook.coverImage || '/placeholder.svg'}
 						alt={`${cook.name} kitchen`}
-						className="w-full h-full object-cover"
+						fill
+						className="object-cover"
 					/>
 				</div>
 
