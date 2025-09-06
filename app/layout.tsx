@@ -1,38 +1,45 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter, Merriweather } from "next/font/google"
-import { CartProvider } from "@/contexts/cart-context"
-import "./globals.css"
+import type React from 'react';
+import type { Metadata } from 'next';
+import { Inter, Merriweather } from 'next/font/google';
+import { CartProvider } from '@/contexts/cart-context';
+import './globals.css';
 
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-})
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-inter',
+});
 
 const merriweather = Merriweather({
-  weight: ["300", "400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-merriweather",
-})
+	weight: ['300', '400', '700'],
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-merriweather',
+});
 
 export const metadata: Metadata = {
-  title: "DapurKita - Malaysian Home Cooking Marketplace",
-  description: "Connect with talented home-based cooks in Malaysia. Discover authentic halal dishes made with love.",
-  generator: "v0.app",
-}
+	title: 'DapurKita - Malaysian Home Cooking Marketplace',
+	description:
+		'Connect with talented home-based cooks in Malaysia. Discover authentic halal dishes made with love.',
+	generator: 'v0.app',
+	icons: {
+		icon: '/favicon.ico',
+	},
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className={`${inter.variable} ${merriweather.variable} antialiased`}>
-      <body>
-        <CartProvider>{children}</CartProvider>
-      </body>
-    </html>
-  )
+	return (
+		<html
+			lang="en"
+			className={`${inter.variable} ${merriweather.variable} antialiased`}
+		>
+			<body>
+				<CartProvider>{children}</CartProvider>
+			</body>
+		</html>
+	);
 }
