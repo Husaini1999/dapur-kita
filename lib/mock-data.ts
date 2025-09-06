@@ -217,7 +217,7 @@ export const mockDishes: Dish[] = [
 		name: 'Chicken Biryani',
 		category: 'Rice Dishes',
 		price: 18.0,
-		image: '/indian-curry-roti.png',
+		image: '/chicken-biryani.png',
 		description:
 			'Fragrant basmati rice with tender chicken, aromatic spices, and saffron',
 		cookingTime: '45 mins',
@@ -234,7 +234,7 @@ export const mockDishes: Dish[] = [
 		name: 'Vegetable Curry',
 		category: 'Main Dishes',
 		price: 12.0,
-		image: '/indian-curry-roti.png',
+		image: '/vegetable-curry.png',
 		description:
 			'Mixed vegetables in rich coconut curry with traditional Indian spices',
 		cookingTime: '25 mins',
@@ -287,7 +287,7 @@ export const mockDishes: Dish[] = [
 		name: 'Laksa Lemak',
 		category: 'Noodles',
 		price: 14.0,
-		image: '/peranakan-nyonya-food.png',
+		image: '/laksa-lemak.png',
 		description:
 			'Rich coconut curry laksa with prawns, fish cake, and fresh herbs',
 		cookingTime: '30 mins',
@@ -355,7 +355,7 @@ export const mockDishes: Dish[] = [
 		name: 'Tandoori Chicken',
 		category: 'Main Dishes',
 		price: 19.0,
-		image: '/indian-curry-roti.png',
+		image: '/tandoori-chicken.png',
 		description: 'Marinated chicken cooked in traditional tandoor oven',
 		cookingTime: '40 mins',
 		available: true,
