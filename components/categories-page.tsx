@@ -26,7 +26,7 @@ const cuisineCategories = [
 		dishCount: 134,
 		image: '/chinese-wok-hei.png',
 		popular: true,
-		color: 'bg-red-50 border-red-200',
+		color: 'bg-orange-50 border-orange-200',
 	},
 	{
 		id: 'indian',

@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -5,6 +9,23 @@ import { Badge } from '@/components/ui/badge';
 import { Search, MapPin, Star, Users, Utensils } from 'lucide-react';
 
 export function HeroSection() {
+	const [searchQuery, setSearchQuery] = useState('');
+	const router = useRouter();
+
+	const handleSearch = () => {
+		if (searchQuery.trim()) {
+			router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+		} else {
+			router.push('/search');
+		}
+	};
+
+	const handleKeyPress = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter') {
+			handleSearch();
+		}
+	};
+
 	return (
 		<section className="relative py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-secondary/30 to-primary/5">
 			<div className="container max-w-6xl mx-auto">
@@ -35,11 +56,15 @@ export function HeroSection() {
 								<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 								<Input
 									placeholder="Search for dishes or cooks..."
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+									onKeyPress={handleKeyPress}
 									className="pl-10 h-11 sm:h-12"
 								/>
 							</div>
 							<Button
 								size="lg"
+								onClick={handleSearch}
 								className="bg-primary hover:bg-primary/90 h-11 sm:h-12 px-6 sm:px-8"
 							>
 								Find Food
@@ -165,7 +190,10 @@ export function HeroSection() {
 					</p>
 				</div>
 				<div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-					<div className="group cursor-pointer">
+					<div
+						className="group cursor-pointer"
+						onClick={() => router.push('/search?q=nasi lemak')}
+					>
 						<div className="aspect-square rounded-xl overflow-hidden bg-card border relative">
 							<Image
 								src="/nasi-lemak.png"
@@ -176,7 +204,10 @@ export function HeroSection() {
 						</div>
 						<p className="text-center mt-2 font-medium text-sm">Nasi Lemak</p>
 					</div>
-					<div className="group cursor-pointer">
+					<div
+						className="group cursor-pointer"
+						onClick={() => router.push('/search?q=beef rendang')}
+					>
 						<div className="aspect-square rounded-xl overflow-hidden bg-card border relative">
 							<Image
 								src="/beef-rendang.png"
@@ -187,7 +218,10 @@ export function HeroSection() {
 						</div>
 						<p className="text-center mt-2 font-medium text-sm">Beef Rendang</p>
 					</div>
-					<div className="group cursor-pointer">
+					<div
+						className="group cursor-pointer"
+						onClick={() => router.push('/search?q=banana leaf rice')}
+					>
 						<div className="aspect-square rounded-xl overflow-hidden bg-card border relative">
 							<Image
 								src="/banana-leaf-rice.png"
@@ -200,7 +234,10 @@ export function HeroSection() {
 							Banana Leaf Rice
 						</p>
 					</div>
-					<div className="group cursor-pointer">
+					<div
+						className="group cursor-pointer"
+						onClick={() => router.push('/search?q=kuih lapis')}
+					>
 						<div className="aspect-square rounded-xl overflow-hidden bg-card border relative">
 							<Image
 								src="/kuih-lapis.png"

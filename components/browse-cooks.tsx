@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,98 +24,13 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet';
-
-// Mock data for cooks
-const mockCooks = [
-	{
-		id: 1,
-		name: "Mak Cik's Kitchen",
-		ownerName: 'Siti Aminah',
-		image: '/cook-profile-1.png',
-		coverImage: '/kitchen-1.png',
-		rating: 4.8,
-		reviewCount: 127,
-		location: 'Ampang, KL',
-		distance: '2.3 km',
-		specialties: ['Malay Traditional', 'Peranakan'],
-		deliveryTime: '30-45 mins',
-		deliveryFee: 3.5,
-		minOrder: 15.0,
-		isOpen: true,
-		featuredDishes: [
-			{ name: 'Nasi Lemak Special', price: 12.5, image: '/nasi-lemak.png' },
-			{ name: 'Rendang Daging', price: 18.0, image: '/beef-rendang.png' },
-		],
-		totalOrders: 450,
-		joinedDate: '2023',
-	},
-	{
-		id: 2,
-		name: "Uncle Wong's Wok",
-		ownerName: 'Wong Ah Chong',
-		image: '/cook-profile-2.png',
-		coverImage: '/kitchen-2.png',
-		rating: 4.6,
-		reviewCount: 89,
-		location: 'Petaling Jaya',
-		distance: '4.1 km',
-		specialties: ['Chinese Malaysian', 'Fusion'],
-		deliveryTime: '25-40 mins',
-		deliveryFee: 4.0,
-		minOrder: 20.0,
-		isOpen: true,
-		featuredDishes: [
-			{ name: 'Char Kway Teow', price: 10.0, image: '/char-kway-teow.png' },
-			{ name: 'Hokkien Mee', price: 12.0, image: '/hokkien-mee.png' },
-		],
-		totalOrders: 320,
-		joinedDate: '2023',
-	},
-	{
-		id: 3,
-		name: "Ravi's Spice Corner",
-		ownerName: 'Ravi Kumar',
-		image: '/cook-profile-3.png',
-		coverImage: '/kitchen-3.png',
-		rating: 4.9,
-		reviewCount: 156,
-		location: 'Brickfields, KL',
-		distance: '3.7 km',
-		specialties: ['Indian Malaysian', 'Vegetarian'],
-		deliveryTime: '35-50 mins',
-		deliveryFee: 3.0,
-		minOrder: 12.0,
-		isOpen: false,
-		featuredDishes: [
-			{ name: 'Roti Canai', price: 3.5, image: '/roti-canai.png' },
-			{ name: 'Banana Leaf Rice', price: 15.0, image: '/banana-leaf-rice.png' },
-		],
-		totalOrders: 580,
-		joinedDate: '2022',
-	},
-	{
-		id: 4,
-		name: 'Nyonya Heritage Kitchen',
-		ownerName: 'Lily Tan',
-		image: '/cook-profile-4.png',
-		coverImage: '/kitchen-4.png',
-		rating: 4.7,
-		reviewCount: 203,
-		location: 'Malacca',
-		distance: '1.8 km',
-		specialties: ['Peranakan', 'Nyonya'],
-		deliveryTime: '40-55 mins',
-		deliveryFee: 2.5,
-		minOrder: 18.0,
-		isOpen: true,
-		featuredDishes: [
-			{ name: 'Ayam Pongteh', price: 16.0, image: '/ayam-pongteh.png' },
-			{ name: 'Kuih Lapis', price: 8.0, image: '/kuih-lapis.png' },
-		],
-		totalOrders: 290,
-		joinedDate: '2023',
-	},
-];
+import {
+	mockCooks,
+	mockDishes,
+	getCooksByCuisine,
+	getDishesByMealTime,
+	getDishesByDietary,
+} from '@/lib/mock-data';
 
 const cuisineTypes = [
 	'Malay Traditional',
@@ -129,13 +45,75 @@ const cuisineTypes = [
 	'Halal Western',
 ];
 
+const mealTimeTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+
+const dietaryTypes = ['Halal', 'Vegetarian', 'Vegan', 'Gluten-Free', 'Spicy'];
+
 export function BrowseCooks() {
+	const searchParams = useSearchParams();
 	const [searchTerm, setSearchTerm] = useState('');
 	const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
+	const [selectedMealTimes, setSelectedMealTimes] = useState<string[]>([]);
+	const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
 	const [sortBy, setSortBy] = useState('rating');
 	const [showOpenOnly, setShowOpenOnly] = useState(false);
 	const [maxDeliveryFee, setMaxDeliveryFee] = useState('');
 	const [maxDistance, setMaxDistance] = useState('');
+
+	// Handle URL parameters
+	useEffect(() => {
+		const category = searchParams.get('category');
+		const meal = searchParams.get('meal');
+		const dietary = searchParams.get('dietary');
+		const search = searchParams.get('search');
+
+		if (category) {
+			// Map category IDs to cuisine types
+			const categoryMap: { [key: string]: string } = {
+				malay: 'Malay Traditional',
+				chinese: 'Chinese Malaysian',
+				indian: 'Indian Malaysian',
+				peranakan: 'Peranakan',
+				western: 'Fusion',
+				thai: 'Thai Cuisine',
+			};
+			if (categoryMap[category]) {
+				setSelectedCuisines([categoryMap[category]]);
+			}
+		}
+
+		if (meal) {
+			// Set meal time filter
+			const mealMap: { [key: string]: string } = {
+				breakfast: 'Breakfast',
+				lunch: 'Lunch',
+				dinner: 'Dinner',
+				snacks: 'Snacks',
+				kuih: 'Snacks', // kuih is a type of snack
+			};
+			if (mealMap[meal]) {
+				setSelectedMealTimes([mealMap[meal]]);
+			}
+		}
+
+		if (dietary) {
+			// Set dietary filter
+			const dietaryMap: { [key: string]: string } = {
+				halal: 'Halal',
+				vegetarian: 'Vegetarian',
+				vegan: 'Vegan',
+				'gluten-free': 'Gluten-Free',
+			};
+			if (dietaryMap[dietary]) {
+				setSelectedDietary([dietaryMap[dietary]]);
+			}
+		}
+
+		if (search === 'true') {
+			// Show advanced search interface
+			setSearchTerm('');
+		}
+	}, [searchParams]);
 
 	const toggleCuisine = (cuisine: string) => {
 		setSelectedCuisines((prev) =>
@@ -145,26 +123,78 @@ export function BrowseCooks() {
 		);
 	};
 
+	const toggleMealTime = (mealTime: string) => {
+		setSelectedMealTimes((prev) =>
+			prev.includes(mealTime)
+				? prev.filter((m) => m !== mealTime)
+				: [...prev, mealTime]
+		);
+	};
+
+	const toggleDietary = (dietary: string) => {
+		setSelectedDietary((prev) =>
+			prev.includes(dietary)
+				? prev.filter((d) => d !== dietary)
+				: [...prev, dietary]
+		);
+	};
+
 	const filteredCooks = mockCooks
 		.filter((cook) => {
+			// Basic search term filtering
+			const searchTerms = searchTerm.toLowerCase().split(' ');
 			const matchesSearch =
-				cook.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				cook.specialties.some((specialty) =>
-					specialty.toLowerCase().includes(searchTerm.toLowerCase())
+				searchTerms.length === 0 ||
+				searchTerms.every(
+					(term) =>
+						cook.name.toLowerCase().includes(term) ||
+						cook.specialties.some((specialty) =>
+							specialty.toLowerCase().includes(term)
+						) ||
+						cook.location.toLowerCase().includes(term) ||
+						cook.ownerName.toLowerCase().includes(term)
 				);
 
+			// Cuisine filtering
 			const matchesCuisine =
 				selectedCuisines.length === 0 ||
 				cook.specialties.some((specialty) =>
 					selectedCuisines.includes(specialty)
 				);
 
+			// Meal time filtering - check if cook has dishes for selected meal times
+			const matchesMealTime =
+				selectedMealTimes.length === 0 ||
+				selectedMealTimes.some((mealTime) => {
+					const cookDishes = mockDishes.filter(
+						(dish) => dish.cookId === cook.id
+					);
+					return cookDishes.some((dish) => dish.mealTime.includes(mealTime));
+				});
+
+			// Dietary filtering - check if cook has dishes with selected dietary info
+			const matchesDietary =
+				selectedDietary.length === 0 ||
+				selectedDietary.some((dietary) => {
+					const cookDishes = mockDishes.filter(
+						(dish) => dish.cookId === cook.id
+					);
+					return cookDishes.some((dish) =>
+						dish.dietaryInfo.some((info) =>
+							info.toLowerCase().includes(dietary.toLowerCase())
+						)
+					);
+				});
+
+			// Open status filtering
 			const matchesOpen = !showOpenOnly || cook.isOpen;
 
+			// Delivery fee filtering
 			const matchesDeliveryFee =
 				!maxDeliveryFee ||
 				cook.deliveryFee <= Number.parseFloat(maxDeliveryFee);
 
+			// Distance filtering
 			const matchesDistance =
 				!maxDistance ||
 				Number.parseFloat(cook.distance) <= Number.parseFloat(maxDistance);
@@ -172,6 +202,8 @@ export function BrowseCooks() {
 			return (
 				matchesSearch &&
 				matchesCuisine &&
+				matchesMealTime &&
+				matchesDietary &&
 				matchesOpen &&
 				matchesDeliveryFee &&
 				matchesDistance
@@ -248,6 +280,8 @@ export function BrowseCooks() {
 								<Filter className="h-4 w-4 mr-2" />
 								Filters
 								{(selectedCuisines.length > 0 ||
+									selectedMealTimes.length > 0 ||
+									selectedDietary.length > 0 ||
 									showOpenOnly ||
 									maxDeliveryFee ||
 									maxDistance) && (
@@ -256,6 +290,8 @@ export function BrowseCooks() {
 										className="ml-2 bg-primary/10 text-primary"
 									>
 										{selectedCuisines.length +
+											selectedMealTimes.length +
+											selectedDietary.length +
 											(showOpenOnly ? 1 : 0) +
 											(maxDeliveryFee ? 1 : 0) +
 											(maxDistance ? 1 : 0)}
@@ -292,6 +328,58 @@ export function BrowseCooks() {
 													className="text-sm cursor-pointer"
 												>
 													{cuisine}
+												</Label>
+											</div>
+										))}
+									</div>
+								</div>
+
+								{/* Meal Times */}
+								<div className="space-y-3">
+									<Label className="text-base font-semibold">Meal Times</Label>
+									<div className="space-y-2">
+										{mealTimeTypes.map((mealTime) => (
+											<div
+												key={mealTime}
+												className="flex items-center space-x-2"
+											>
+												<Checkbox
+													id={mealTime}
+													checked={selectedMealTimes.includes(mealTime)}
+													onCheckedChange={() => toggleMealTime(mealTime)}
+												/>
+												<Label
+													htmlFor={mealTime}
+													className="text-sm cursor-pointer"
+												>
+													{mealTime}
+												</Label>
+											</div>
+										))}
+									</div>
+								</div>
+
+								{/* Dietary Preferences */}
+								<div className="space-y-3">
+									<Label className="text-base font-semibold">
+										Dietary Preferences
+									</Label>
+									<div className="space-y-2">
+										{dietaryTypes.map((dietary) => (
+											<div
+												key={dietary}
+												className="flex items-center space-x-2"
+											>
+												<Checkbox
+													id={dietary}
+													checked={selectedDietary.includes(dietary)}
+													onCheckedChange={() => toggleDietary(dietary)}
+												/>
+												<Label
+													htmlFor={dietary}
+													className="text-sm cursor-pointer"
+												>
+													{dietary}
 												</Label>
 											</div>
 										))}
@@ -360,6 +448,8 @@ export function BrowseCooks() {
 									className="w-full bg-transparent"
 									onClick={() => {
 										setSelectedCuisines([]);
+										setSelectedMealTimes([]);
+										setSelectedDietary([]);
 										setShowOpenOnly(false);
 										setMaxDeliveryFee('');
 										setMaxDistance('');
@@ -374,6 +464,8 @@ export function BrowseCooks() {
 
 				{/* Active Filters */}
 				{(selectedCuisines.length > 0 ||
+					selectedMealTimes.length > 0 ||
+					selectedDietary.length > 0 ||
 					showOpenOnly ||
 					maxDeliveryFee ||
 					maxDistance) && (
@@ -386,6 +478,26 @@ export function BrowseCooks() {
 								onClick={() => toggleCuisine(cuisine)}
 							>
 								{cuisine} ×
+							</Badge>
+						))}
+						{selectedMealTimes.map((mealTime) => (
+							<Badge
+								key={mealTime}
+								variant="secondary"
+								className="bg-blue-100 text-blue-700 border-blue-200 cursor-pointer hover:bg-blue-200 transition-colors flex-shrink-0"
+								onClick={() => toggleMealTime(mealTime)}
+							>
+								{mealTime} ×
+							</Badge>
+						))}
+						{selectedDietary.map((dietary) => (
+							<Badge
+								key={dietary}
+								variant="secondary"
+								className="bg-green-100 text-green-700 border-green-200 cursor-pointer hover:bg-green-200 transition-colors flex-shrink-0"
+								onClick={() => toggleDietary(dietary)}
+							>
+								{dietary} ×
 							</Badge>
 						))}
 						{showOpenOnly && (

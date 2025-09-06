@@ -9,134 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, MapPin } from 'lucide-react';
-
-// Mock data - in real app this would come from API
-const mockCooks = [
-	{
-		id: 1,
-		name: "Mak Cik's Kitchen",
-		ownerName: 'Mak Cik Aminah',
-		image: '/cook-profile-1.png',
-		coverImage: '/kitchen-1.png',
-		rating: 4.8,
-		reviewCount: 127,
-		location: 'Bangsar, KL',
-		distance: '2.1 km',
-		specialties: ['Nasi Lemak', 'Rendang', 'Sambal'],
-		deliveryTime: '30-45 min',
-		deliveryFee: 3.5,
-		minOrder: 15.0,
-		isOpen: true,
-		featuredDishes: [
-			{ name: 'Nasi Lemak', price: 8.5, image: '/nasi-lemak.png' },
-			{ name: 'Beef Rendang', price: 15.0, image: '/beef-rendang.png' },
-		],
-		totalOrders: 1250,
-		joinedDate: '2023-01-15',
-	},
-	{
-		id: 2,
-		name: "Ravi's Spice Corner",
-		ownerName: 'Ravi Kumar',
-		image: '/cook-profile-3.png',
-		coverImage: '/kitchen-3.png',
-		rating: 4.7,
-		reviewCount: 89,
-		location: 'Brickfields, KL',
-		distance: '3.2 km',
-		specialties: ['Banana Leaf Rice', 'Curry', 'Roti'],
-		deliveryTime: '25-40 min',
-		deliveryFee: 4.0,
-		minOrder: 20.0,
-		isOpen: true,
-		featuredDishes: [
-			{ name: 'Banana Leaf Rice', price: 12.0, image: '/banana-leaf-rice.png' },
-			{ name: 'Ayam Pongteh', price: 14.0, image: '/ayam-pongteh.png' },
-		],
-		totalOrders: 890,
-		joinedDate: '2023-03-20',
-	},
-];
-
-const mockDishes = [
-	{
-		id: 1,
-		name: 'Nasi Lemak',
-		category: 'Main Course',
-		price: 8.5,
-		image: '/nasi-lemak.png',
-		description:
-			'Traditional Malaysian coconut rice with sambal, anchovies, and boiled egg',
-		cookingTime: '20-25 min',
-		available: true,
-		rating: 4.9,
-		reviewCount: 45,
-		dietaryInfo: ['Halal', 'Contains Fish'],
-		cookName: "Mak Cik's Kitchen",
-		cuisine: 'Malay',
-	},
-	{
-		id: 2,
-		name: 'Beef Rendang',
-		category: 'Main Course',
-		price: 15.0,
-		image: '/beef-rendang.png',
-		description: 'Slow-cooked beef in rich coconut milk and spices',
-		cookingTime: '30-35 min',
-		available: true,
-		rating: 4.8,
-		reviewCount: 38,
-		dietaryInfo: ['Halal'],
-		cookName: "Mak Cik's Kitchen",
-		cuisine: 'Malay',
-	},
-	{
-		id: 3,
-		name: 'Banana Leaf Rice',
-		category: 'Main Course',
-		price: 12.0,
-		image: '/banana-leaf-rice.png',
-		description:
-			'Rice served on banana leaf with various curries and vegetables',
-		cookingTime: '25-30 min',
-		available: true,
-		rating: 4.7,
-		reviewCount: 52,
-		dietaryInfo: ['Vegetarian Option'],
-		cookName: "Ravi's Spice Corner",
-		cuisine: 'Indian',
-	},
-	{
-		id: 4,
-		name: 'Ayam Pongteh',
-		category: 'Main Course',
-		price: 14.0,
-		image: '/ayam-pongteh.png',
-		description: 'Peranakan chicken stew with fermented bean paste',
-		cookingTime: '35-40 min',
-		available: true,
-		rating: 4.6,
-		reviewCount: 29,
-		dietaryInfo: ['Halal'],
-		cookName: "Ravi's Spice Corner",
-		cuisine: 'Peranakan',
-	},
-	{
-		id: 5,
-		name: 'Kuih Lapis',
-		category: 'Dessert',
-		price: 6.0,
-		image: '/kuih-lapis.png',
-		description: 'Traditional layered cake with coconut milk and pandan',
-		cookingTime: '15-20 min',
-		available: true,
-		rating: 4.5,
-		reviewCount: 33,
-		dietaryInfo: ['Halal', 'Vegetarian'],
-		cookName: "Siti's Desserts",
-		cuisine: 'Malay',
-	},
-];
+import { mockCooks, mockDishes } from '@/lib/mock-data';
 
 export function SearchPage() {
 	const searchParams = useSearchParams();
@@ -171,8 +44,10 @@ export function SearchPage() {
 		const dishesResults = mockDishes.filter(
 			(dish) =>
 				dish.name.toLowerCase().includes(query) ||
-				dish.cookName.toLowerCase().includes(query) ||
-				dish.cuisine.toLowerCase().includes(query)
+				dish.cuisine.toLowerCase().includes(query) ||
+				dish.category.toLowerCase().includes(query) ||
+				dish.description.toLowerCase().includes(query) ||
+				dish.dietaryInfo.some((info) => info.toLowerCase().includes(query))
 		);
 
 		setFilteredCooks(cooksResults);
@@ -281,13 +156,17 @@ export function SearchPage() {
 										<Badge variant="secondary">{filteredDishes.length}</Badge>
 									</h2>
 									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-										{filteredDishes.map((dish) => (
-											<DishCard
-												key={dish.id}
-												dish={dish}
-												cookName={dish.cookName}
-											/>
-										))}
+										{filteredDishes.map((dish) => {
+											const cook = mockCooks.find((c) => c.id === dish.cookId);
+											return (
+												<DishCard
+													key={dish.id}
+													dish={dish}
+													cookName={cook?.name || 'Unknown Cook'}
+													cookId={dish.cookId}
+												/>
+											);
+										})}
 									</div>
 								</div>
 							)}
