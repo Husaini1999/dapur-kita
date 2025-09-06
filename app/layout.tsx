@@ -38,6 +38,11 @@ export default function RootLayout({
 			className={`${inter.variable} ${merriweather.variable} antialiased`}
 		>
 			<body>
+				{/* Demo Disclaimer Banner */}
+				<div className="bg-amber-100 border-b border-amber-200 text-amber-800 text-center py-2 px-4 text-sm">
+					<strong>Demo Website:</strong> This website is for demonstration
+					purposes only. Some features may not function properly.
+				</div>
 				<CartProvider>{children}</CartProvider>
 			</body>
 		</html>
