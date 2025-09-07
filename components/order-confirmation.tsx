@@ -57,8 +57,13 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 
 			// Transform cart data into order confirmation format
 			const itemsByCook = decodedOrderData.itemsByCook || {};
-			const orderItems = Object.entries(itemsByCook).map(([cookId, items]) => {
-				const itemsArray = items as any[];
+			const orderItems = Object.entries(itemsByCook).map(([, items]) => {
+				const itemsArray = items as Array<{
+					dishName: string;
+					quantity: number;
+					price: number;
+					cookName: string;
+				}>;
 				return {
 					cookName: itemsArray[0]?.cookName || 'Unknown Cook',
 					cookPhone: '+60 19-000 0000', // Default phone

@@ -27,9 +27,6 @@ import {
 import {
 	mockCooks,
 	mockDishes,
-	getCooksByCuisine,
-	getDishesByMealTime,
-	getDishesByDietary,
 } from '@/lib/mock-data';
 
 const cuisineTypes = [

@@ -294,12 +294,12 @@ export function CookProfile({ cookId }: CookProfileProps) {
 						<CardContent className="p-6 space-y-4">
 							<h3 className="font-semibold text-lg">About {cook.ownerName}</h3>
 							<p className="text-muted-foreground leading-relaxed">
-								Welcome to {cook.name}! I'm {cook.ownerName}, and I specialize
+								Welcome to {cook.name}! I&apos;m {cook.ownerName}, and I specialize
 								in {cook.specialties.join(' and ')} cuisine. With over{' '}
 								{cook.totalOrders} orders completed and a {cook.rating}-star
-								rating, I'm committed to delivering authentic, halal-certified
+								rating, I&apos;m committed to delivering authentic, halal-certified
 								dishes made with love and traditional recipes. Located in{' '}
-								{cook.location}, I've been serving the community since{' '}
+								{cook.location}, I&apos;ve been serving the community since{' '}
 								{cook.joinedDate}.
 							</p>
 
