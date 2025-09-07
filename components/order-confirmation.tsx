@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,8 +20,8 @@ interface OrderConfirmationProps {
 	orderId: string;
 }
 
-// Mock order data
-const mockOrderData = {
+// Fallback mock data for when no order data is available
+const fallbackOrderData = {
 	id: 'DK1703123456',
 	status: 'confirmed',
 	estimatedDelivery: '45-60 minutes',
@@ -45,7 +46,58 @@ const mockOrderData = {
 };
 
 export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
-	const order = mockOrderData;
+	const searchParams = useSearchParams();
+
+	// Try to get order data from URL parameters
+	let order;
+	try {
+		const orderDataParam = searchParams.get('data');
+		if (orderDataParam) {
+			const decodedOrderData = JSON.parse(decodeURIComponent(orderDataParam));
+
+			// Transform cart data into order confirmation format
+			const itemsByCook = decodedOrderData.itemsByCook || {};
+			const orderItems = Object.entries(itemsByCook).map(([cookId, items]) => {
+				const itemsArray = items as any[];
+				return {
+					cookName: itemsArray[0]?.cookName || 'Unknown Cook',
+					cookPhone: '+60 19-000 0000', // Default phone
+					dishes: itemsArray.map((item) => ({
+						name: item.dishName,
+						quantity: item.quantity,
+						price: item.price,
+					})),
+				};
+			});
+
+			order = {
+				id: orderId,
+				status: 'confirmed',
+				estimatedDelivery: '30-45 minutes',
+				deliveryAddress:
+					decodedOrderData.customerInfo?.address || 'Address not provided',
+				customerPhone:
+					decodedOrderData.customerInfo?.phone || '+60 12-000 0000',
+				items: orderItems,
+				subtotal: decodedOrderData.subtotal || 0,
+				deliveryFee: decodedOrderData.deliveryFee || 3.5,
+				serviceFee: decodedOrderData.serviceFee || 2.0,
+				total: decodedOrderData.total || 0,
+				paymentMethod:
+					decodedOrderData.paymentMethod === 'card'
+						? 'Credit Card ending in 1234'
+						: decodedOrderData.paymentMethod === 'ewallet'
+						? "E-Wallet (GrabPay, Touch 'n Go)"
+						: 'Online Banking',
+				orderTime: decodedOrderData.orderTime || new Date().toLocaleString(),
+			};
+		} else {
+			order = fallbackOrderData;
+		}
+	} catch (error) {
+		console.error('Error parsing order data:', error);
+		order = fallbackOrderData;
+	}
 
 	return (
 		<div className="container max-w-4xl mx-auto py-12 px-4">
@@ -246,7 +298,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 					<div className="space-y-3">
 						<Button
 							asChild
-							className="w-full bg-saffron-yellow hover:bg-saffron-yellow/90 text-spice-brown"
+							className="w-full bg-amber-600 hover:bg-amber-700 text-white"
 						>
 							<Link href={`/review/${orderId}`}>
 								<Star className="h-4 w-4 mr-2" />
@@ -259,10 +311,16 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 								Continue Shopping
 							</Link>
 						</Button>
-						<Button variant="outline" className="w-full bg-transparent">
+						<Button
+							variant="outline"
+							className="w-full bg-transparent hover:bg-gray-50"
+						>
 							Track Order
 						</Button>
-						<Button variant="outline" className="w-full bg-transparent">
+						<Button
+							variant="outline"
+							className="w-full bg-transparent hover:bg-gray-50"
+						>
 							Download Receipt
 						</Button>
 					</div>
@@ -276,7 +334,11 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 									Contact our customer support team if you have any questions
 									about your order.
 								</div>
-								<Button variant="outline" size="sm" className="bg-transparent">
+								<Button
+									variant="outline"
+									size="sm"
+									className="bg-transparent hover:bg-gray-50"
+								>
 									Contact Support
 								</Button>
 							</div>

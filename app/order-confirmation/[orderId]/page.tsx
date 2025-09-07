@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Navigation } from '@/components/navigation';
 import { OrderConfirmation } from '@/components/order-confirmation';
 
@@ -14,7 +15,15 @@ export default async function OrderConfirmationPage({
 	return (
 		<main className="min-h-screen bg-background">
 			<Navigation />
-			<OrderConfirmation orderId={orderId} />
+			<Suspense
+				fallback={
+					<div className="container max-w-4xl mx-auto py-12 px-4 text-center">
+						Loading order confirmation...
+					</div>
+				}
+			>
+				<OrderConfirmation orderId={orderId} />
+			</Suspense>
 		</main>
 	);
 }

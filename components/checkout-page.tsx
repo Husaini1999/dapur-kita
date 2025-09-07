@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,6 +39,14 @@ export function CheckoutPage() {
 
 	const [paymentMethod, setPaymentMethod] = useState('card');
 	const [saveInfo, setSaveInfo] = useState(false);
+	const [orderPlaced, setOrderPlaced] = useState(false);
+
+	// Redirect to cart if empty - but not when processing order or after order is placed
+	useEffect(() => {
+		if (state.items.length === 0 && !isProcessing && !orderPlaced) {
+			router.push('/cart');
+		}
+	}, [state.items.length, router, isProcessing, orderPlaced]);
 
 	const itemsByCook = getItemsByCook();
 	const deliveryFee = 3.5;
@@ -56,14 +64,44 @@ export function CheckoutPage() {
 		// Generate order ID
 		const orderId = `DK${Date.now()}`;
 
-		// Clear cart and redirect to confirmation
+		// Prepare order data to pass to confirmation page
+		const orderData = {
+			items: state.items,
+			itemsByCook: getItemsByCook(),
+			customerInfo,
+			paymentMethod,
+			subtotal,
+			deliveryFee,
+			serviceFee,
+			total,
+			orderTime: new Date().toLocaleString(),
+		};
+
+		// Encode order data to pass via URL
+		const encodedOrderData = encodeURIComponent(JSON.stringify(orderData));
+
+		// Mark order as placed before clearing cart
+		setOrderPlaced(true);
+
+		// Clear cart and redirect to confirmation with order data
 		clearCart();
-		router.push(`/order-confirmation/${orderId}`);
+		router.push(`/order-confirmation/${orderId}?data=${encodedOrderData}`);
 	};
 
-	if (state.items.length === 0) {
-		router.push('/cart');
-		return null;
+	// Show loading or empty state while redirecting (but not after order is placed)
+	if (state.items.length === 0 && !orderPlaced) {
+		return (
+			<div className="container max-w-6xl mx-auto py-8 px-4">
+				<div className="text-center">
+					<h1 className="font-serif font-bold text-3xl text-foreground mb-4">
+						Redirecting to Cart...
+					</h1>
+					<p className="text-muted-foreground">
+						Your cart is empty. Redirecting you back to the cart page.
+					</p>
+				</div>
+			</div>
+		);
 	}
 
 	return (
